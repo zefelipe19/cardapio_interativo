@@ -62,6 +62,9 @@ const getCart = () => ({
             return this.getProducts()
         }
     },
+    makeOrder() {
+        console.log(this.products)
+    }
 })
 
 
@@ -111,7 +114,8 @@ const adminAria = () => ({
         .then(res => res.json())
         .then(res => (
             window.alert(`${res.title} foi criada!`),
-            this.menu.unshift(res),
+            productList = {products: []},
+            this.menu.unshift({...productList, ...res}),
             this.allCategories.push(res),
             this.newCategoryModel.title = ''
         ))

@@ -34,18 +34,20 @@
                 </div>
                 <!-- End item -->
 
-                
+
             </template>
         </template>
-        <template x-if="!products">
-            
+        <template x-if="products.length == 0">
+
             <div class="container">
                 <h1>Seu carrinho ainda está vazio</h1>
+                <p>Que tal enche-lo?</p>
+                <a href="{% url 'store' %}">Loja</a>
             </div>
-            
+
         </template>
         <div class="card-footer d-flex justify-content-end align-items-center gap-2">
-            <button class="btn btn-primary">Pedir</button>
+            <button @click="makeOrder" class="btn btn-primary">Pedir</button>
             <button @click="clearCart" class="btn btn-danger">Limpar Carrinho</button>
         </div>
     </div>

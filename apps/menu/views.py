@@ -8,6 +8,10 @@ def index(request):
 def cart(request):
     return render(request, 'cart.html')
 
+
+def store(request):
+    return render(request, 'store.html')
+
 @login_required()
 def admin(request):
     return render(request, 'admin.html')

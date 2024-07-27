@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Category, Product
+from .models import Category, Product, Order, OrderItem
 
 
 class ProductInline(admin.TabularInline):
@@ -28,3 +28,19 @@ class ProductAdmin(admin.ModelAdmin):
 
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Product, ProductAdmin)
+
+
+class OrderItemInline(admin.TabularInline):
+    model = OrderItem
+    extra = 1
+    readonly_fields = ('id',)
+    fields = ('order', 'product', 'unit_price', 'quantity')
+
+
+class OrderAdmin(admin.ModelAdmin):
+    inlines = (OrderItemInline, )
+    list_display = ('costumer_name', 'total_amount', 'created_at')
+    list_display_links = ('costumer_name',)
+
+
+admin.site.register(Order, OrderAdmin)
