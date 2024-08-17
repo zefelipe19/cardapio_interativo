@@ -7,7 +7,7 @@ const getMenu = () => ({
     },
     menu: [],
     async getProducts() {
-        await fetch(apiUrl + 'list_menu')
+        await fetch(apiUrl + 'menu/list_menu')
             .then(res => res.json())
             .then(res => (
                 this.menu = res
@@ -63,7 +63,12 @@ const getCart = () => ({
         }
     },
     makeOrder() {
-        console.log(this.products)
+        const order = {
+            clientName: "Fulano",
+            products: this.products
+        }
+
+        console.log(order)
     }
 })
 
@@ -74,7 +79,7 @@ const getPromos = () => ({
     },
     promoProducts: [],
     async getPromoProducts() {
-        await fetch(apiUrl + 'list_promos')
+        await fetch(apiUrl + 'menu/list_promos')
             .then(res => res.json())
             .then(res => (this.promoProducts = res))
     }
@@ -94,7 +99,7 @@ const adminAria = () => ({
     },
     menu: [],
     async getProducts() {
-        await fetch(apiUrl + 'list_all_menu')
+        await fetch(apiUrl + 'menu/list_all_menu')
         .then(res => res.json())
             .then(res => (
                 this.menu = res
@@ -162,7 +167,7 @@ const adminAria = () => ({
     
     },
     async deleteProduct(product_id) {
-    await fetch(apiUrl + `product/${product_id}`, {
+    await fetch(apiUrl + `menu/product/${product_id}`, {
         method: 'DELETE',
     })
     .then(res => res.json())
@@ -190,7 +195,7 @@ const adminAria = () => ({
         updateProductData.append('image', newProductImage)
         updateProductData.append('payload', JSON.stringify(productData))
 
-        await fetch(apiUrl + `product/${productId}`, {
+        await fetch(apiUrl + `menu/product/${productId}`, {
             method: 'POST',
             body: updateProductData
         })

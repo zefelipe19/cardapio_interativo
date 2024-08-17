@@ -1,6 +1,9 @@
 from ninja import ModelSchema, Field, Schema
 from .models import Product, Category
 
+class MessageSchema(Schema):
+    message: str
+
 
 class ProductSchema(ModelSchema):
     class Meta:
@@ -12,7 +15,6 @@ class ProductSchemaIn(ModelSchema):
     class Meta:
         model = Product
         fields = ['category', 'title', 'price', 'promotional_price', 'description', 'is_active', 'is_promo']
-
 
 
 class ProductSchemaUpdate(ModelSchema):
@@ -39,7 +41,3 @@ class CategorySchemaMenu(ModelSchema):
         fields = ['id', 'title']
     
     products: list[ProductSchema] = Field(..., alias='product')
-
-
-class MessageSchema(Schema):
-    message: str

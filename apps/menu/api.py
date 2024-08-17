@@ -1,13 +1,14 @@
 from django.db.models import Q, Count
 from django.shortcuts import get_object_or_404
-from ninja import NinjaAPI, Body, File
+from ninja import Body, File, Router
 from ninja.files import UploadedFile
 from .schemas import ProductSchemaIn, ProductSchema, CategorySchemaIn, ProductSchemaUpdate, CategorySchemaMenu, CategorySchema, MessageSchema
 from .models import Product, Category
 
-api = NinjaAPI()
 
-@api.get('/list_menu', response=list[CategorySchemaMenu])
+router = Router()
+
+@router.get('/list_menu', response=list[CategorySchemaMenu])
 def list_menu(request):
     """
         Busca todas as categorias que tenham ao menos um produto relacionado e que estejam ativos
@@ -15,7 +16,7 @@ def list_menu(request):
     menu = Category.objects.annotate(products_qtd=Count('product')).filter(products_qtd__gte=1, product__is_active=True)
     return menu
 
-@api.get('/list_all_menu', response=list[CategorySchemaMenu])
+@router.get('/list_all_menu', response=list[CategorySchemaMenu])
 def list_all_menu(request):
     """
         Busca todas as categorias e seus produtos
@@ -23,7 +24,7 @@ def list_all_menu(request):
     all_menu = Category.objects.all()
     return all_menu
 
-@api.get('/list_promos', response=list[ProductSchema])
+@router.get('/list_promos', response=list[ProductSchema])
 def list_promos(request):
     """
         Busca todos os produtos cujo campo is_promo é verdadeiro e estão ativos com is_active
@@ -31,7 +32,7 @@ def list_promos(request):
     promos = Product.objects.filter(Q(is_active=True) & Q(is_promo=True) & Q(promotional_price__gt=1)).filter().all()
     return promos
 
-@api.get('/category', response=list[CategorySchema])
+@router.get('/category', response=list[CategorySchema])
 def list_categories(request):
     """
         Lista apenas as categorias sem buscar nenhum produto
@@ -39,7 +40,7 @@ def list_categories(request):
     category = Category.objects.all()
     return category
 
-@api.post('/category', response={201: CategorySchema, 400: MessageSchema})
+@router.post('/category', response={201: CategorySchema, 400: MessageSchema})
 def create_category(request, payload: CategorySchemaIn):
     """
         Cria uma categoria e a retorna
@@ -50,7 +51,7 @@ def create_category(request, payload: CategorySchemaIn):
         return 400, {"message": f"Não foi possível salvar a categoria, erro: {e}"}
     return 201, category
 
-@api.delete('/category/{category_id}', response={200: MessageSchema, 400: MessageSchema})
+@router.delete('/category/{category_id}', response={200: MessageSchema, 400: MessageSchema})
 def delete_category(request, category_id: int):
     """
         Deleta uma categoria, que não possua nenhum produto vinculado
@@ -63,7 +64,7 @@ def delete_category(request, category_id: int):
         return 400, {"message": f"Não foi possível deletar a categoria, erro: {e}"}
     return 200, {"message": f"{category.title} foi deletado permanentemente"}
 
-@api.post('/product', response={201: ProductSchema, 400 : MessageSchema})
+@router.post('/product', response={201: ProductSchema, 400 : MessageSchema})
 def create_product(request, payload: ProductSchemaIn, image: UploadedFile = File(None)):
     """
         Cria um produto desempacotando o payload junto com sua imagem caso a tenha
@@ -83,7 +84,7 @@ def create_product(request, payload: ProductSchemaIn, image: UploadedFile = File
         print("erro: ", e)
         return 400, {"message" : f"Não foi possível criar o produto | Erro {e}"}
 
-@api.delete('/product/{product_id}', response={200: MessageSchema, 404: MessageSchema})
+@router.delete('/product/{product_id}', response={200: MessageSchema, 404: MessageSchema})
 def delete_product(request, product_id: int):
     """
         Deleta um produto com base no id recebido
@@ -96,7 +97,7 @@ def delete_product(request, product_id: int):
         return 404, {"message": f"O produto de id {product_id} não foi encontrado"}
     return 200, {"message": f"o produto {product.title} foi deletado"}
 
-@api.post('/product/{product_id}', response={201: ProductSchema, 400: MessageSchema})
+@router.post('/product/{product_id}', response={201: ProductSchema, 400: MessageSchema})
 def update_product(request, product_id: int, payload: ProductSchemaUpdate = Body(...), image: UploadedFile = File(None)):
     """
         Busca e modifica os valores de um model a partir do payload e do image, 
