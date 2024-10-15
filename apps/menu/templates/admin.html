@@ -69,7 +69,11 @@
                         </label>
                         <label for="is_active">
                             Em Estoque/Ativo
-                            <input type="checkbox" name="is_active" id="productIsActive">
+                            <input type="checkbox" name="is_active" id="productIsActive" checked>
+                        </label>
+                        <label for="is_avaliable">
+                            Disponivel
+                            <input type="checkbox" name="is_avaliable" id="productIsAvaliable" checked>
                         </label>
                         <label for="is_promo">
                             Em Promoção
@@ -133,6 +137,12 @@
                                                     </template>
                                                 </label>
                                                 <br>
+                                                <label>Produto Disponível:
+                                                    <template x-if="product.is_available">
+                                                        <i class="bi bi-check2"></i>
+                                                    </template>
+                                                </label>
+                                                <br>
                                                 <label>Produto em Promoção:
                                                     <template x-if="product.is_promo">
                                                         <i class="bi bi-check2"></i>
@@ -188,9 +198,14 @@
                                                             x-model="product.description"
                                                             class="form-control"></textarea>
                                                         <label for="is_active">
-                                                            Em Estoque/Ativo:
+                                                            Ativo:
                                                             <input type="checkbox" name="is_active" id="is_active"
                                                                 x-model="product.is_active">
+                                                        </label>
+                                                        <label for="is_avaliable">
+                                                            Disponivel:
+                                                            <input type="checkbox" name="is_available" id="is_available"
+                                                                x-model="product.is_available">
                                                         </label>
                                                         <label for="is_promo">
                                                             Em Promoção:

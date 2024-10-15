@@ -111,8 +111,9 @@ const adminAria = () => ({
         .then(res => res.json())
         .then(res => (
             window.alert(`${res.title} foi criada!`),
-            this.menu.unshift(res),
-            this.allCategories.push(res),
+            item = {products: Array(0), ...res},
+            this.menu.unshift(item),
+            this.allCategories.push(item),
             this.newCategoryModel.title = ''
         ))
     },
@@ -126,8 +127,9 @@ const adminAria = () => ({
             price: document.querySelector("#productPrice").value ? document.querySelector("#productPrice").value : 0,
             promotional_price: document.querySelector("#productPromocionalPrice").value ? document.querySelector("#productPromocionalPrice").value : null,
             description: document.querySelector('#productDescription').value ? document.querySelector('#productDescription').value : null,
-            is_active: document.querySelector("#productIsActive") ? Boolean(document.querySelector("#productIsActive").checked) : false,
-            is_promo: document.querySelector('#productIsPromo') ? Boolean(document.querySelector('#productIsPromo').checked) : false
+            is_active: document.querySelector("#productIsActive") ? Boolean(document.querySelector("#productIsActive").checked) : true,
+            is_avaliable: document.querySelector("#productIsAvaliable") ? Boolean(document.querySelector("#productIsAvaliable").checked): true, 
+            is_promo: document.querySelector('#productIsPromo') ? Boolean(document.querySelector('#productIsPromo').checked) : false,
         }
         
         newProductData.append('image', productImage)
@@ -148,7 +150,6 @@ const adminAria = () => ({
             return res.json()
         })
         .then(res => (
-            console.log(res),
             window.alert(`${res.title} foi criado`), 
             this.getProducts()
         ))

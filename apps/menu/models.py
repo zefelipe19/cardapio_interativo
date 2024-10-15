@@ -31,8 +31,9 @@ class Product(BaseModel):
     promotional_price = models.DecimalField(max_digits=8, decimal_places=2, blank=True, null=True)
     description = models.TextField(blank=True, null=True, verbose_name='Descrição')
     image = models.ImageField(blank=True, null=True, verbose_name='Foto', upload_to='produtos/', )
-    is_active = models.BooleanField(default=True, verbose_name='Em Estoque')
+    is_active = models.BooleanField(default=True, verbose_name='Ativo')
     is_promo = models.BooleanField(default=False, verbose_name='Em Promoção')
+    is_available = models.BooleanField(default=True, verbose_name='Disponivel')
     slug = models.SlugField(blank=True, null=True)
 
     class Meta:
